@@ -34,7 +34,7 @@ public class DateTransform: TransformType {
 
 	public init() {}
 
-	public func transformFromJSON(value: AnyObject?) -> NSDate? {
+	public func transformFromJSON(value: Any?) -> NSDate? {
 		if let timeInt = value as? Double {
 			return NSDate(timeIntervalSince1970: NSTimeInterval(timeInt))
 		}

@@ -30,6 +30,6 @@ public protocol TransformType {
 	associatedtype Object
 	associatedtype JSON
 
-	func transformFromJSON(value: AnyObject?) -> Object?
+	func transformFromJSON(value: Any?) -> Object?
 	func transformToJSON(value: Object?) -> JSON?
 }

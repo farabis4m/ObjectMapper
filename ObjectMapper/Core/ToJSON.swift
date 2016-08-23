@@ -28,20 +28,20 @@
 
 import class Foundation.NSNumber
 
-private func setValue(value: AnyObject, map: Map) {
-	setValue(value, key: map.currentKey!, checkForNestedKeys: map.keyIsNested, dictionary: &map.JSONDictionary)
+private func setValue(value: Any, map: Map) {
+    setValue(value, key: map.currentKey!, checkForNestedKeys: map.keyIsNested, dictionary: &map.JSONDictionary)
 }
 
-private func setValue(value: AnyObject, key: String, checkForNestedKeys: Bool, inout dictionary: [String : AnyObject]) {
+private func setValue(value: Any, key: String, checkForNestedKeys: Bool, inout dictionary: [String : Any]) {
 	if checkForNestedKeys {
 		let keyComponents = ArraySlice(key.characters.split { $0 == "." })
-		setValue(value, forKeyPathComponents: keyComponents, dictionary: &dictionary)
+        setValue(value, forKeyPathComponents: keyComponents, dictionary: &dictionary)
 	} else {
 		dictionary[key] = value
 	}
 }
 
-private func setValue(value: AnyObject, forKeyPathComponents components: ArraySlice<String.CharacterView.SubSequence>, inout dictionary: [String : AnyObject]) {
+private func setValue(value: Any, forKeyPathComponents components: ArraySlice<String.CharacterView.SubSequence>, inout dictionary: [String : Any]) {
 	if components.isEmpty {
 		return
 	}
@@ -51,7 +51,7 @@ private func setValue(value: AnyObject, forKeyPathComponents components: ArraySl
 	if components.count == 1 {
 		dictionary[String(head)] = value
 	} else {
-		var child = dictionary[String(head)] as? [String : AnyObject]
+		var child = dictionary[String(head)] as? [String : Any]
 		if child == nil {
 			child = [:]
 		}
@@ -66,31 +66,38 @@ private func setValue(value: AnyObject, forKeyPathComponents components: ArraySl
 internal final class ToJSON {
 	
 	class func basicType<N>(field: N, map: Map) {
-		if let x = field as? AnyObject where false
-			|| x is NSNumber // Basic types
-			|| x is Bool
+//        let x = field as? AnyObject where
+        let x = field
+		if  false
+//			|| x is NSNumber // Basic types
+			|| x is Bool // Basic types
 			|| x is Int
 			|| x is Double
 			|| x is Float
 			|| x is String
-			|| x is Array<NSNumber> // Arrays
-			|| x is Array<Bool>
+//			|| x is Array<NSNumber>
+			|| x is Array<Bool> // Arrays
 			|| x is Array<Int>
 			|| x is Array<Double>
 			|| x is Array<Float>
 			|| x is Array<String>
-			|| x is Array<AnyObject>
-			|| x is Array<Dictionary<String, AnyObject>>
-			|| x is Dictionary<String, NSNumber> // Dictionaries
-			|| x is Dictionary<String, Bool>
+//			|| x is Array<AnyObject>
+            || x is Array<Dictionary<String, Any>>
+            || x is Array<Any>
+//			|| x is Array<Dictionary<String, AnyObject>>
+//			|| x is Dictionary<String, NSNumber> // Dictionaries
+			|| x is Dictionary<String, Bool> // Dictionaries
 			|| x is Dictionary<String, Int>
 			|| x is Dictionary<String, Double>
 			|| x is Dictionary<String, Float>
 			|| x is Dictionary<String, String>
-			|| x is Dictionary<String, AnyObject>
+//			|| x is Dictionary<String, AnyObject>
+            || x is Dictionary<String, Any>
 		{
 			setValue(x, map: map)
-		}
+        } else {
+            setValue(NSNull(), map: map)
+        }
 	}
 
 	class func optionalBasicType<N>(field: N?, map: Map) {
@@ -122,7 +129,7 @@ internal final class ToJSON {
 	}
 	
 	class func twoDimensionalObjectArray<N: Mappable>(field: Array<Array<N>>, map: Map) {
-		var array = [[[String : AnyObject]]]()
+		var array = [[[String : Any]]]()
 		for innerArray in field {
 			let JSONObjects = Mapper(context: map.context).toJSONArray(innerArray)
 			array.append(JSONObjects)
