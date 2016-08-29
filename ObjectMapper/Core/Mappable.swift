@@ -52,9 +52,6 @@ public extension Mappable {
 //		return Mapper().toJSONString(self, prettyPrint: prettyPrint)
 //	}
     
-    public func toPureJSON() -> [String: Any] {
-        return Mapper().toPureJSON(self)
-    }
 }
 
 public extension Array where Element: Mappable {

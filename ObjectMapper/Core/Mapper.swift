@@ -37,9 +37,11 @@ public enum MappingType {
 public final class Mapper<N: Mappable> {
 	
 	public var context: MapContext?
+    public var mapper: MapOf<N>?
 	
-	public init(context: MapContext? = nil){
+    public init(context: MapContext? = nil, mapper: MapOf<N>? = nil) {
 		self.context = context
+        self.mapper = mapper
 	}
 	
 	// MARK: Mapping functions that map to an existing object toObject
@@ -66,7 +68,12 @@ public final class Mapper<N: Mappable> {
 	public func map(JSONDictionary: [String : Any], toObject object: N) -> N {
 		var mutableObject = object
 		let map = Map(mappingType: .FromJSON, JSONDictionary: JSONDictionary, toObject: true, context: context)
-		mutableObject.mapping(map)
+        if let mapper = self.mapper {
+            mapper.object = object
+            mapper.mapFromMap(map)
+        } else {
+            mutableObject.mapping(map)
+        }
 		return mutableObject
 	}
 
@@ -118,6 +125,12 @@ public final class Mapper<N: Mappable> {
 		
 		// fall back to using init? to create N
 		if var object = N(map) {
+            if let mapper = self.mapper {
+                mapper.object = object
+                mapper.mapFromMap(map)
+            } else {
+                object.mapping(map)
+            }
 			object.mapping(map)
 			return object
 		}
@@ -155,6 +168,7 @@ public final class Mapper<N: Mappable> {
 	
 	/// Maps a JSON object to an array of Mappable objects if it is an array of JSON dictionary, or returns nil.
 	public func mapArray(JSON: Any?) -> [N]? {
+        print(JSON)
 		if let JSONArray = JSON as? [[String : Any]] {
 			return mapArray(JSONArray)
 		}
@@ -287,17 +301,15 @@ extension Mapper {
 	public func toJSON(object: N) -> [String : Any] {
 		var mutableObject = object
 		let map = Map(mappingType: .ToJSON, JSONDictionary: [:], context: context)
-		mutableObject.mapping(map)
+        if let mapper = self.mapper {
+            mapper.object = object
+            mapper.mapToMap(map)
+        } else {
+            mutableObject.mapping(map)
+        }
 		return map.JSONDictionary
 	}
     
-    public func toPureJSON(object: N) -> [String: Any] {
-        var mutableObject = object
-        let map = Map(mappingType: .ToJSON, JSONDictionary: [:], context: context)
-        mutableObject.mapping(map)
-        return map.JSONDictionary
-    }
-	
 	public func toJSONArray(array: [N]) -> [[String : Any]] {
 		return array.map {
 			// convert every element in array to JSON dictionary equivalent

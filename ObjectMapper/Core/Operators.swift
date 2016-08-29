@@ -314,6 +314,47 @@ public func <- <T: Mappable>(inout left: T!, right: Map) {
 	}
 }
 
+infix operator <-- {}
+/// Object conforming to Mappable
+public func <-- <T: Mappable>(inout left: T, right: Map) {
+    switch right.mappingType {
+    case .FromJSON:
+        FromJSON.object(&left, map: right)
+    case .ToJSON:
+        ToJSON.object(left, map: right)
+    }
+}
+
+/// Optional Mappable objects
+public func <-- <T: Mappable>(inout left: T?, right: Map) {
+    switch right.mappingType {
+    case .FromJSON where right.isKeyPresent:
+        if let l = right.currentValue as? T {
+            left = l
+        } else {
+            FromJSON.optionalObject(&left, map: right)
+        }
+    case .ToJSON:
+        ToJSON.optionalObject(left, map: right)
+    default: ()
+    }
+}
+
+/// Implicitly unwrapped optional Mappable objects
+public func <-- <T: Mappable>(inout left: T!, right: Map) {
+    switch right.mappingType {
+    case .FromJSON where right.isKeyPresent:
+        if let l = right.currentValue as? T {
+            left = l
+        } else {
+            FromJSON.optionalObject(&left, map: right)
+        }
+    case .ToJSON:
+        ToJSON.optionalObject(left, map: right)
+    default: ()
+    }
+}
+
 // MARK:- Transforms of Mappable Objects - <T: Mappable>
 
 /// Object conforming to Mappable that have transforms
