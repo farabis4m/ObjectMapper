@@ -106,6 +106,8 @@ public final class Mapper<N: Mappable> {
 	public func map(JSON: Any?) -> N? {
 		if let object = JSON as? [String : Any] {
 			return map(object)
+        } else if let JSONString = JSON as? String {
+            return map(JSONString)
         }
 
 		return nil
@@ -131,7 +133,6 @@ public final class Mapper<N: Mappable> {
             } else {
                 object.mapping(map)
             }
-			object.mapping(map)
 			return object
 		}
 		
