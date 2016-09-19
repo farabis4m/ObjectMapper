@@ -589,9 +589,11 @@
 					};
 					6AAC8F7519F03C2900E7A677 = {
 						CreatedOnToolsVersion = 6.0.1;
+						LastSwiftMigration = 0800;
 					};
 					6AAC8F8019F03C2900E7A677 = {
 						CreatedOnToolsVersion = 6.0.1;
+						LastSwiftMigration = 0800;
 					};
 					CD1602FE1AC023D5000CD69A = {
 						CreatedOnToolsVersion = 6.2;

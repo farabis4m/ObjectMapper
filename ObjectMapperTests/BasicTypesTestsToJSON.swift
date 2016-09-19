@@ -486,6 +486,6 @@ class BasicTypesTestsToJSON: XCTestCase {
 		XCTAssertTrue((json["dictStringInt"] as? [String:Int])?.count > 0)
 		XCTAssertTrue((json["dictStringDouble"] as? [String:Double])?.count > 0)
 		XCTAssertTrue((json["dictStringFloat"] as? [String:Float])?.count > 0)
-		XCTAssertEqual(json["dictStringString"]?["string"], "string")
+		XCTAssertEqual((json["dictStringString"] as? [String: String])?["string"], "string")
 	}
 }
