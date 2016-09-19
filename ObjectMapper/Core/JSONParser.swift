@@ -8,10 +8,10 @@
 
 import Foundation
 
-public class JSONParser {
+open class JSONParser {
 	
-	private var view: String.UnicodeScalarView
-	private var index: String.UnicodeScalarView.Index
+	fileprivate var view: String.UnicodeScalarView
+	fileprivate var index: String.UnicodeScalarView.Index
 	/**
 	NOTE: UnicodeScalars increase the performance compared to Characters
 	*/
@@ -25,13 +25,13 @@ public class JSONParser {
 		next = {
 			if index == view.endIndex { return nil }
 			let scalar = view[index]
-			index = index.successor()
+			index = <#T##Collection corresponding to `index`##Collection#>.index(after: index)
 			return scalar
 		}
 		
 	}
 	
-	func checkType(str: String)->Any{
+	func checkType(_ str: String)->Any{
 		switch str {
 		case "true": return true
 		case "false": return false
@@ -47,7 +47,7 @@ public class JSONParser {
 		}
 	}
 	
-	public func parse() -> Any? {
+	open func parse() -> Any? {
 		let scalar = self.view[self.index]
 		if scalar == "{" {
 			return self.parseObject()
@@ -59,7 +59,7 @@ public class JSONParser {
 	/**
 	Parse an Object
 	*/
-	public func parseObject()->[String: Any]{
+	open func parseObject()->[String: Any]{
 		
 		var output = [String: Any]()
 		var buffer = String.UnicodeScalarView()
@@ -144,7 +144,7 @@ public class JSONParser {
 	/**
 	Parse an Array
 	*/
-    public func parseArray() -> [[String: Any]] {
+    open func parseArray() -> [[String: Any]] {
         var output = [[String: Any]]()
         var omits: [String.UnicodeScalarView] = [",".unicodeScalars, "\n".unicodeScalars, "\t".unicodeScalars, " ".unicodeScalars]
         let comma = ",".unicodeScalars[",".unicodeScalars.startIndex]
