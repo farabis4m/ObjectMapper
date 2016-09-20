@@ -9,7 +9,7 @@ import Foundation
 
 import ObjectMapper
 
-infix operator <-- {}
+infix operator <--
 
 ///// Object conforming to Mappable
 //public func <-- <T>(inout left: T, right: Map) {
@@ -17,30 +17,30 @@ infix operator <-- {}
 //}
 
 /// Optional Mappable objects
-public func <-- <T>(inout left: T?, right: Map) {
+public func <-- <T>(left: inout T?, right: Map) {
     switch right.mappingType {
-    case .FromJSON where right.isKeyPresent:
+    case .fromJSON where right.isKeyPresent:
         if let l = right.currentValue as? T {
             left = l
         } else {
             left <- right
         }
-    case .ToJSON:
+    case .toJSON:
         left <- right
     default: ()
     }
 }
 
 /// Implicitly unwrapped optional Mappable objects
-public func <-- <T>(inout left: T!, right: Map) {
+public func <-- <T>(left: inout T!, right: Map) {
     switch right.mappingType {
-    case .FromJSON where right.isKeyPresent:
+    case .fromJSON where right.isKeyPresent:
         if let l = right.currentValue as? T {
             left = l
         } else {
             left <- right
         }
-    case .ToJSON:
+    case .toJSON:
         left <- right
     default: ()
     }
@@ -48,49 +48,49 @@ public func <-- <T>(inout left: T!, right: Map) {
 
 
 /// Object of Basic type with Transform
-public func <-- <Transform: TransformType>(inout left: Transform.Object, right: (Map, Transform)) {
+public func <-- <Transform: TransformType>(left: inout Transform.Object, right: (Map, Transform)) {
     let (map, transform) = right
     switch map.mappingType {
-    case .FromJSON where map.isKeyPresent:
+    case .fromJSON where map.isKeyPresent:
         if let l = map.currentValue as? Transform.Object {
             left = l
         } else {
             left <- (map, transform)
         }
-    case .ToJSON:
+    case .toJSON:
         left <- (map, transform)
     default: ()
     }
 }
 
 /// Optional object of basic type with Transform
-public func <-- <Transform: TransformType>(inout left: Transform.Object?, right: (Map, Transform)) {
+public func <-- <Transform: TransformType>(left: inout Transform.Object?, right: (Map, Transform)) {
     let (map, transform) = right
     switch map.mappingType {
-    case .FromJSON where map.isKeyPresent:
+    case .fromJSON where map.isKeyPresent:
         if let l = map.currentValue as? Transform.Object {
             left = l
         } else {
             left <- (map, transform)
         }
-    case .ToJSON:
+    case .toJSON:
         left <- (map, transform)
     default: ()
     }
 }
 
 /// Implicitly unwrapped optional object of basic type with Transform
-public func <-- <Transform: TransformType>(inout left: Transform.Object!, right: (Map, Transform)) {
+public func <-- <Transform: TransformType>(left: inout Transform.Object!, right: (Map, Transform)) {
     let (map, transform) = right
     switch map.mappingType {
-    case .FromJSON where map.isKeyPresent:
+    case .fromJSON where map.isKeyPresent:
         if let l = map.currentValue as? Transform.Object {
             left = l
         } else {
             left <- (map, transform)
         }
         
-    case .ToJSON:
+    case .toJSON:
         left <- (map, transform)
     default: ()
     }
@@ -99,96 +99,96 @@ public func <-- <Transform: TransformType>(inout left: Transform.Object!, right:
 // MARK:- Mappable Objects - <T: Mappable>
 
 /// Object conforming to Mappable
-public func <-- <T: Mappable>(inout left: T, right: Map) {
+public func <-- <T: Mappable>(left: inout T, right: Map) {
     switch right.mappingType {
-    case .FromJSON:
+    case .fromJSON:
         if let l = right.currentValue as? T {
             left = l
         } else {
             left <- right
         }
-    case .ToJSON:
+    case .toJSON:
         left <- right
     }
 }
 
 /// Optional Mappable objects
-public func <-- <T: Mappable>(inout left: T?, right: Map) {
+public func <-- <T: Mappable>(left: inout T?, right: Map) {
     switch right.mappingType {
-    case .FromJSON where right.isKeyPresent:
+    case .fromJSON where right.isKeyPresent:
         if let l = right.currentValue as? T {
             left = l
         } else {
             left <- right
         }
-    case .ToJSON:
+    case .toJSON:
         left <- right
     default: ()
     }
 }
 
 /// Implicitly unwrapped optional Mappable objects
-public func <-- <T: Mappable>(inout left: T!, right: Map) {
+public func <-- <T: Mappable>(left: inout T!, right: Map) {
     switch right.mappingType {
-    case .FromJSON where right.isKeyPresent:
+    case .fromJSON where right.isKeyPresent:
         if let l = right.currentValue as? T {
             left = l
         } else {
             left <- right
         }
-    case .ToJSON:
+    case .toJSON:
         left <- right
     default: ()
     }
 }
 
 /// Array of Mappable objects
-public func <-- <T: Mappable>(inout left: Array<T>, right: Map) {
+public func <-- <T: Mappable>(left: inout Array<T>, right: Map) {
     switch right.mappingType {
-    case .FromJSON where right.isKeyPresent:
+    case .fromJSON where right.isKeyPresent:
         if let l = right.currentValue as? [T] {
             left = l
         } else {
             left <- right
         }
-    case .ToJSON:
+    case .toJSON:
         left <- right
     default: ()
     }
 }
 
 /// Optional array of Mappable objects
-public func <-- <T: Mappable>(inout left: Array<T>?, right: Map) {
+public func <-- <T: Mappable>(left: inout Array<T>?, right: Map) {
     switch right.mappingType {
-    case .FromJSON where right.isKeyPresent:
+    case .fromJSON where right.isKeyPresent:
         if let l = right.currentValue as? [T] {
             left = l
         } else {
             left <- right
         }
-    case .ToJSON:
+    case .toJSON:
         left <- right
     default: ()
     }
 }
 
 /// Implicitly unwrapped Optional array of Mappable objects
-public func <-- <T: Mappable>(inout left: Array<T>!, right: Map) {
+public func <-- <T: Mappable>(left: inout Array<T>!, right: Map) {
     switch right.mappingType {
-    case .FromJSON where right.isKeyPresent:
+    case .fromJSON where right.isKeyPresent:
         if let l = right.currentValue as? [T] {
             left = l
         } else {
             left <- right
         }
-    case .ToJSON:
+    case .toJSON:
         left <- right
     default: ()
     }
 }
 
 /// Object of Raw Representable type
-public func <-- <T: RawRepresentable>(inout left: T, right: Map) {
+public func <-- <T: RawRepresentable>(left: inout T, right: Map) {
     if let value = right.currentValue as? T {
         left = value
     } else {
@@ -197,7 +197,7 @@ public func <-- <T: RawRepresentable>(inout left: T, right: Map) {
 }
 
 /// Optional Object of Raw Representable type
-public func <-- <T: RawRepresentable>(inout left: T?, right: Map) {
+public func <-- <T: RawRepresentable>(left: inout T?, right: Map) {
     if let value = right.currentValue as? T {
         left = value
     } else {
@@ -206,7 +206,7 @@ public func <-- <T: RawRepresentable>(inout left: T?, right: Map) {
 }
 
 /// Implicitly Unwrapped Optional Object of Raw Representable type
-public func <-- <T: RawRepresentable>(inout left: T!, right: Map) {
+public func <-- <T: RawRepresentable>(left: inout T!, right: Map) {
     if let value = right.currentValue as? T {
         left = value
     } else {
