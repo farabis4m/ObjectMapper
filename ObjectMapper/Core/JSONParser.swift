@@ -25,7 +25,7 @@ open class JSONParser {
 		next = {
 			if index == view.endIndex { return nil }
 			let scalar = view[index]
-			index = <#T##Collection corresponding to `index`##Collection#>.index(after: index)
+            index = view.index(after: index)
 			return scalar
 		}
 		

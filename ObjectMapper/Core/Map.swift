@@ -127,7 +127,7 @@ public final class Map {
 			failedCount += 1
 			
 			// Returns dummy memory as a proxy for type `T`
-			let pointer = UnsafeMutablePointer<T>(allocatingCapacity: 0)
+			let pointer = UnsafeMutablePointer<T>.allocate(capacity: 0)
 			pointer.deallocate(capacity: 0)
 			return pointer.pointee
 		}

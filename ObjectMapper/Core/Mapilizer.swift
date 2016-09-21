@@ -24,12 +24,12 @@ public class MapOf<ObjectType: Mappable>: Mapilizer {
     private var toJSON: ((ObjectMap, Object) -> Void)?
     var object: Object!
     
-    public init(fromJSON: (ObjectMap, Object) -> Void, toJSON: (ObjectMap, Object) -> Void) {
+    public init(fromJSON: @escaping (ObjectMap, Object) -> Void, toJSON: @escaping (ObjectMap, Object) -> Void) {
         self.fromJSON = fromJSON
         self.toJSON = toJSON
     }
     
-    public init(block: (ObjectMap, Object) -> Void) {
+    public init(block: @escaping (ObjectMap, Object) -> Void) {
         self.fromJSON = block
         self.toJSON = { [unowned self] (map, object) in
             self.fromJSON(map, object)
