@@ -82,6 +82,11 @@ class NullableKeysFromJSONTests: XCTestCase {
 }
 
 class Player: Mappable  {
+	/// This function can be used to validate JSON prior to mapping. Return nil to cancel mapping at this point
+	required init() {
+		
+	}
+
 	var firstName: String?
 	var lastName: String?
 	var team: String?
@@ -102,13 +107,13 @@ class Player: Mappable  {
 }
 
 class Address: Mappable {
+	/// This function can be used to validate JSON prior to mapping. Return nil to cancel mapping at this point
+	required init() {
+	}
+
 	var street: String?
 	var number: Int?
 	var city: String?
-
-	required init?(_ map: Map){
-		mapping(map)
-	}
 
 	func mapping(_ map: Map) {
 		street <- map["street"]

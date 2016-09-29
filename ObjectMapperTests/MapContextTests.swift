@@ -49,11 +49,10 @@ class MapContextTests: XCTestCase {
 	}
 	
 	class Person: Mappable {
+		/// This function can be used to validate JSON prior to mapping. Return nil to cancel mapping at this point
+		required init() {}
+
 		var name: String?
-		
-		required init?(_ map: Map){
-			
-		}
 		
 		func mapping(_ map: Map) {
 			if (map.context as? Context)?.shouldMap == true {

@@ -37,11 +37,17 @@ public enum MappingType {
 public final class Mapper<N: Mappable> {
 	
 	public var context: MapContext?
+	private let _transform: ObjectTransform<N>?
 	
-    public init(context: MapContext? = nil) {
-		self.context = context
+	var transform: ObjectTransform<N>? {
+		return _transform ?? N.defaultMapping
 	}
 	
+	public init(context: MapContext? = nil, transform: ObjectTransform<N>? = nil) {
+		_transform = transform
+		self.context = context
+	}
+
 	// MARK: Mapping functions that map to an existing object toObject
 	
 	/// Maps a JSON object to an existing Mappable object if it is a JSON dictionary, or returns the passed object as is
@@ -49,7 +55,6 @@ public final class Mapper<N: Mappable> {
 		if let JSON = JSON as? [String : Any] {
 			return map(JSON, toObject: object)
 		}
-		
 		return object
 	}
 	
@@ -64,10 +69,9 @@ public final class Mapper<N: Mappable> {
 	/// Maps a JSON dictionary to an existing object that conforms to Mappable.
 	/// Usefull for those pesky objects that have crappy designated initializers like NSManagedObject
 	public func map(_ JSONDictionary: [String : Any], toObject object: N) -> N {
-		var mutableObject = object
 		let map = Map(mappingType: .fromJSON, JSONDictionary: JSONDictionary, toObject: true, context: context)
-		mutableObject.mapping(map)
-		return mutableObject
+		self.transform?.transformFrom(map, object: object)
+		return object
 	}
 
 	//MARK: Mapping functions that create an object
@@ -110,20 +114,18 @@ public final class Mapper<N: Mappable> {
 	public func map(_ JSONDictionary: [String : Any]) -> N? {
 		let map = Map(mappingType: .fromJSON, JSONDictionary: JSONDictionary, context: context)
 		
-		// check if object is StaticMappable
 		if let klass = N.self as? StaticMappable.Type {
-			if var object = klass.objectForMapping(map) as? N {
-				object.mapping(map)
+			if let object = klass.objectForMapping(map) as? N, self.transform?.validation?(JSONDictionary) == true {
+				self.transform?.transformFrom(map, object: object)
 				return object
 			}
 		}
 		
-		// fall back to using init? to create N
-		if var object = N(map) {
-			object.mapping(map)
+		if self.transform?.validation?(JSONDictionary) == true {
+			let object = N()
+			self.transform?.transformFrom(map, object: object)
 			return object
 		}
-		
 		return nil
 	}
 
@@ -288,17 +290,13 @@ extension Mapper {
 	// MARK: Functions that create JSON from objects	
 	
 	public func toJSON(_ object: N) -> [String : Any] {
-		var mutableObject = object
 		let map = Map(mappingType: .toJSON, JSONDictionary: [:], context: context)
-		mutableObject.mapping(map)
+		self.transform?.transformTo(map, object: object)
 		return map.JSONDictionary
 	}
     
 	public func toJSONArray(_ array: [N]) -> [[String : Any]] {
-		return array.map {
-			// convert every element in array to JSON dictionary equivalent
-			self.toJSON($0)
-		}
+		return array.map{ self.toJSON($0) }
 	}
 	
 	///Maps a dictionary of Objects that conform to Mappable to a JSON dictionary of dictionaries.

@@ -12,7 +12,7 @@ import ObjectMapper
 
 class MappableTypesWithTransformsTests: XCTestCase {
 	// This is a func so that it can be collapsed
-	func JSONPayload() -> [String : AnyObject] {
+	func JSONPayload() -> [String : Any] {
 		return [
 			"teams": [[
 				"api_uri": "/teams/8",
@@ -250,7 +250,7 @@ class MappableTypesWithTransformsTests: XCTestCase {
 		var I_winner: Team!
 		
 		required init(URI: String) { self.URI = URI }
-		required init?(_ map: Map) {}
+		required init() {}
 		
 		func mapping(_ map: Map) {
 			players		<- (map["players"], RelationshipTransform<Player>())		// 2D Array with transform
@@ -285,7 +285,7 @@ class MappableTypesWithTransformsTests: XCTestCase {
 		var I_players: [Player]?
 		
 		required init(URI: String) { self.URI = URI }
-		required init?(_ map: Map) {}
+		required override init() {}
 		
 		func mapping(_ map: Map) {
 			players		<- (map["players"], RelationshipTransform<Player>())
@@ -296,9 +296,7 @@ class MappableTypesWithTransformsTests: XCTestCase {
 	
 	class Player: Mappable, URIInitiable {
 		required init(URI: String) {}
-		required init?(_ map: Map) {}
-		
-		func mapping(_ map: Map) {}
+		required init() {}
 	}
 }
 
@@ -316,7 +314,6 @@ class RelationshipTransform<ObjectType: Mappable & URIInitiable>: TransformType 
 		
 		return relation
 	}
-	
 	func transformToJSON(_ value: Object?) -> JSON? {
 		return nil
 	}

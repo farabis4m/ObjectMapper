@@ -29,7 +29,7 @@ class NSDecimalNumberType: Mappable {
     var intString: NSDecimalNumber?
     var doubleString: NSDecimalNumber?
 
-    init(){
+    required init(){
 
     }
 

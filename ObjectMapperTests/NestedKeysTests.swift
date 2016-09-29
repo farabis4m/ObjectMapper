@@ -80,7 +80,7 @@ class NestedKeysTests: XCTestCase {
 						"objectDict": ["key": ["value": 999]]
 					]
 				]
-			]
+			] as AnyObject
 		]
 
 		let mapper = Mapper<NestedKeys>()
@@ -163,9 +163,7 @@ class NestedKeys: Mappable {
 	var objectArray: [Object] = []
 	var objectDict: [String: Object] = [:]
 
-	required init?(_ map: Map){
-		
-	}
+	required init() {}
 
 	func mapping(_ map: Map) {
 		nonNestedString <- map["non.nested.key", nested: false]
@@ -206,13 +204,7 @@ class NestedKeys: Mappable {
 class Object: Mappable, Equatable {
 	var value: Int = Int.min
 	
-	required init?(_ map: Map){
-		
-	}
-	
-	func mapping(_ map: Map) {
-		value <- map["value"]
-	}
+	required init() {}
 }
 
 func == (lhs: Object, rhs: Object) -> Bool {

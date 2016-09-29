@@ -46,7 +46,7 @@ class IgnoreNilTests: XCTestCase {
 	fileprivate class User: Mappable {
 		var name: String?
 		
-		init(){}
+		required init(){}
 		
 		required init?(_ map: Map){
 			

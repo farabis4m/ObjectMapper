@@ -73,7 +73,7 @@ class Person: Mappable {
 	var friend: Person?
 	var friends: [Person]? = []
 	
-	init(){
+	required init(){
 		
 	}
 	
@@ -120,11 +120,7 @@ class PersonCluster: StaticMappable {
 	var friend: Person?
 	var friends: [Person]? = []
 	
-	init(){
-		
-	}
-	
-	required init?(_ map: Map){
+	required init(){
 		
 	}
 	

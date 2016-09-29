@@ -159,7 +159,7 @@ class Transforms: Mappable {
 	var customFormatDate = Date()
 	var customFormatDateOpt: Date?
 	
-	var URL = Foundation.URL()
+	var URL = Foundation.URL(fileURLWithPath: "")
 	var URLOpt: Foundation.URL?
 	
 	var intWithString: Int = 0
@@ -169,32 +169,30 @@ class Transforms: Mappable {
 	var firstImageType: ImageType?
 	var secondImageType: ImageType?
 
-	init(){
-		
-	}
-	
-	required init?(_ map: Map){
-		
-	}
-	
-	func mapping(_ map: Map) {
-		date				<- (map["date"], DateTransform())
-		dateOpt				<- (map["dateOpt"], DateTransform())
-		
-		ISO8601Date			<- (map["ISO8601Date"], ISO8601DateTransform())
-		ISO8601DateOpt		<- (map["ISO8601DateOpt"], ISO8601DateTransform())
-		
-		customFormatDate	<- (map["customFormateDate"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss"))
-		customFormatDateOpt <- (map["customFormateDateOpt"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss"))
+	required init() {}
+}
 
-		URL					<- (map["URL"], URLTransform())
-		URLOpt				<- (map["URLOpt"], URLTransform())
-		
-		intWithString		<- (map["intWithString"], TransformOf<Int, String>(fromJSON: { $0 == nil ? nil : Int($0!) }, toJSON: { $0.map { String($0) } }))
-		int64Value			<- (map["int64Value"], TransformOf<Int64, NSNumber>(fromJSON: { $0?.int64Value }, toJSON: { $0.map { NSNumber(value: $0 as Int64) } }))
-		
-		firstImageType		<- (map["firstImageType"], EnumTransform<ImageType>())
-		secondImageType		<- (map["secondImageType"], EnumTransform<ImageType>())
+extension Transforms {
+	static var defaultMapping: ObjectTransform<Transforms> {
+		return ObjectTransform({ (object, map) in
+			object.date				<- (map["date"], DateTransform())
+			object.dateOpt				<- (map["dateOpt"], DateTransform())
+			
+			object.ISO8601Date			<- (map["ISO8601Date"], ISO8601DateTransform())
+			object.ISO8601DateOpt		<- (map["ISO8601DateOpt"], ISO8601DateTransform())
+			
+			object.customFormatDate	<- (map["customFormateDate"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss"))
+			object.customFormatDateOpt <- (map["customFormateDateOpt"], CustomDateFormatTransform(formatString: "yyyy-MM-dd'T'HH:mm:ss"))
+			
+			object.URL					<- (map["URL"], URLTransform())
+			object.URLOpt				<- (map["URLOpt"], URLTransform())
+			
+			object.intWithString		<- (map["intWithString"], TransformOf<Int, String>(fromJSON: { $0 == nil ? nil : Int($0!) }, toJSON: { $0.map { String($0) } }))
+			object.int64Value			<- (map["int64Value"], TransformOf<Int64, NSNumber>(fromJSON: { $0?.int64Value }, toJSON: { $0.map { NSNumber(value: $0 as Int64) } }))
+			
+			object.firstImageType		<- (map["firstImageType"], EnumTransform<ImageType>())
+			object.secondImageType		<- (map["secondImageType"], EnumTransform<ImageType>())
+		})
 	}
 }
 

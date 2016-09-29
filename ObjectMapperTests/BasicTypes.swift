@@ -127,7 +127,7 @@ class BasicTypes: Mappable {
 	var dictEnumIntOptional: [String: EnumInt]?
 	var dictEnumIntImplicitlyUnwrapped: [String: EnumInt]!
 
-	init(){
+	required init(){
 		
 	}
 	
@@ -229,7 +229,7 @@ class TestCollectionOfPrimitives : Mappable {
 	var arrayDouble: [Double] = []
 	var arrayFloat: [Float] = []
 	
-	init(){
+	required init(){
 		
 	}
 	
