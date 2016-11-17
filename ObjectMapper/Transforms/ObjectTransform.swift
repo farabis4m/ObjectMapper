@@ -31,12 +31,16 @@ open class ObjectTransform<ObjectType> {
 		self.to = bidirectional
 	}
 	
-	open func transformFrom(_ map: Map, object: Object) {
+    @discardableResult
+	open func transformFrom(_ map: Map, object: Object) -> ObjectType? {
 		self.from?(object, map)
+        return object
 	}
-	
-	open func transformTo(_ map: Map, object: Object) {
+    
+	@discardableResult
+    open func transformTo(_ map: Map, object: Object) -> [String: Any] {
 		self.to?(object, map)
+        return map.JSONDictionary
 	}
 	
 	open func validate(_ validation: @escaping Validation) -> ObjectTransform<ObjectType> {

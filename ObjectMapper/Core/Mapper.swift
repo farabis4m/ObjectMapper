@@ -40,7 +40,7 @@ public final class Mapper<N: Mappable> {
 	private let _transform: ObjectTransform<N>?
 	
 	var transform: ObjectTransform<N>? {
-		return _transform ?? N.defaultMapping
+		return _transform ?? N.mapping
 	}
 	
 	public init(context: MapContext? = nil, transform: ObjectTransform<N>? = nil) {

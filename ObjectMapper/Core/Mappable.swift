@@ -10,22 +10,28 @@ import Foundation
 
 public protocol Mappable {
 	init()
+    
+    func mapping(map: Map)
 }
 
-extension Mappable {
-	static var defaultMapping: ObjectTransform<Self>? {
-		// Mock default mapping. Does nothing.
-		return ObjectTransform({ (object, map) in })
+public extension Mappable {
+    func mapping(map: Map) {}
+}
+
+public extension Mappable {
+    static var mapping: ObjectTransform<Self>? {
+        return ObjectTransform({ $0.mapping(map: $1) })
 	}
 }
 
-extension Mappable {
-	func toJSON(printer: ObjectTransform<Self>) -> Any? {
-		
-		return nil
+public extension Mappable {
+    func toJSON(transform: ObjectTransform<Self>? = nil) -> [String: Any] {
+        let map = Map(mappingType: .toJSON, JSONDictionary: [:])
+        return (transform ?? type(of: self).mapping)?.transformTo(map, object: self) ?? [:]
 	}
-	func fromJSON(printer: TransformOf<Self, Any>) -> Self? {
-		return nil
+	func fromJSON(transform: ObjectTransform<Self>) -> Self? {
+        let map = Map(mappingType: .fromJSON, JSONDictionary: [:])
+        return (transform ?? type(of: self).mapping)?.transformFrom(map, object: self)
 	}
 }
 
@@ -38,6 +44,16 @@ public protocol StaticMappable: Mappable {
 
 public extension Mappable {
 	
+    init(attributes: [String: Any]) {
+        self.init()
+        self.update(attributes: attributes)
+    }
+    
+    func update(attributes: [String: Any], transform: ObjectTransform<Self>? = nil) {
+        let map = Map(mappingType: .fromJSON, JSONDictionary: attributes)
+        (transform ?? type(of: self).mapping)?.transformFrom(map, object: self)
+    }
+    
 	/// Initializes object from a JSON String
 	public init?(JSONString: String) {
 //		if let obj: Self = Mapper().map(JSONString) {
@@ -60,10 +76,10 @@ public extension Mappable {
 	}
 	
 	/// Returns the JSON Dictionary for the object
-	public func toJSON() -> [String: Any] {
-		return [:]
-//		return Mapper().toJSON(self)
-	}
+//	public func toJSON() -> [String: Any] {
+//		return [:]
+////		return Mapper().toJSON(self)
+//	}
 	
 //	/// Returns the JSON String for the object
 //	public func toJSONString(prettyPrint: Bool = false) -> String? {

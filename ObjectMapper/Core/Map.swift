@@ -57,12 +57,10 @@ public final class Map {
 		self.context = context
 	}
     
-    public init(mappingType: MappingType, pureJSONDictionary: [String : Any], toObject: Bool = false, context: MapContext? = nil) {
-        self.mappingType = mappingType
-//        self.JSONDictionary = JSONDictionary
-        // TODO: Add purify
-        self.toObject = toObject
-        self.context = context
+    public func set(_ key: String, _ value: Any) {
+        if mappingType == .toJSON {
+            JSONDictionary[key] = value
+        }
     }
 	
 	/// Sets the current mapper value and key.

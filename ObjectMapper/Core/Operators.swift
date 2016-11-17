@@ -34,6 +34,42 @@
 
 infix operator <-
 
+public func <- <T>(map: Map, value: T) {
+    if map.mappingType == .toJSON {
+        if let key = map.currentKey {
+            let components = key.components(separatedBy: ".")
+            if components.count == 1 { map.JSONDictionary[key] = value }
+            else {
+                var destination = (map.JSONDictionary[components.first!] as? [String: Any]) ?? [:]
+                destination[components.last!] = value
+            }
+        }
+    }
+}
+
+public func <- <T>(map: Map, value: T?) {
+    if map.mappingType == .toJSON {
+        if let key = map.currentKey, let v = value {
+            let components = key.components(separatedBy: ".")
+            if components.count == 1 { map.JSONDictionary[key] = v }
+            else {
+                var destination = (map.JSONDictionary[components.first!] as? [String: Any]) ?? [:]
+                destination[components.last!] = v
+            }
+        }
+    }
+}
+
+//public func <- <T>(map: Map, value: T!) {
+//    if map.mappingType == .toJSON {
+//        if let key = map.currentKey {
+//            map.JSONDictionary[key] = value
+//        }
+//    }
+//}
+
+
+
 // MARK:- Objects with Basic types
 
 /// Object of Basic type
