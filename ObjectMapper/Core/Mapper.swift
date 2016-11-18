@@ -119,7 +119,7 @@ public final class Mapper<N: Mappable> {
 		}
 		
 		// fall back to using init? to create N
-		if var object = N(map) {
+        if var object = N(with: map) {
 			object.mapping(map)
 			return object
 		}
