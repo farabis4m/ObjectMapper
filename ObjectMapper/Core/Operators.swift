@@ -591,6 +591,50 @@ public func <- <T: Mappable>(left: inout Array<T>!, right: Map) {
 	}
 }
 
+// MARK:- Array of Basic objects - Array<String>
+
+/// Array of Mappable objects
+public func <- (left: inout Array<String>, right: Map) {
+    switch right.mappingType {
+    case .fromJSON where right.isKeyPresent:
+        if let value = right.currentValue as? [String] {
+            left = value
+        } else if let value = right.currentValue as? String {
+            if let items = (try? Jay().anyJsonFromData(([UInt8])(value.data(using: .utf8)!))) as? [String] {
+                left = items
+            }
+        }
+        
+    case .toJSON:
+        right.JSONDictionary[right.currentKey!] = left
+//        map.JSOND
+    default: ()
+    }
+}
+
+///// Optional array of Mappable objects
+//public func <- <T: String>(left: inout Array<T>?, right: Map) {
+//    switch right.mappingType {
+//    case .fromJSON where right.isKeyPresent:
+//        FromJSON.optionalObjectArray(&left, map: right)
+//    case .toJSON:
+//        ToJSON.optionalObjectArray(left, map: right)
+//    default: ()
+//    }
+//}
+//
+///// Implicitly unwrapped Optional array of Mappable objects
+//public func <- <T: String>(left: inout Array<T>!, right: Map) {
+//    switch right.mappingType {
+//    case .fromJSON where right.isKeyPresent:
+//        FromJSON.optionalObjectArray(&left, map: right)
+//    case .toJSON:
+//        ToJSON.optionalObjectArray(left, map: right)
+//    default: ()
+//    }
+//}
+
+
 // MARK:- Array of Mappable objects with transforms - Array<T: Mappable>
 
 /// Array of Mappable objects
