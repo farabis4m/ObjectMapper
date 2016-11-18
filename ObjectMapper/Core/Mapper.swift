@@ -279,7 +279,8 @@ public final class Mapper<N: Mappable> {
 
 	/// Convert a JSON String into an Object using NSJSONSerialization
 	public static func parseJSONString(_ JSON: String) -> Any? {
-		return JSONParser(JSON).parse()
+		let data = Array(JSON.utf8)
+		return try? Jay().anyJsonFromData(data)
 	}
 }
 
