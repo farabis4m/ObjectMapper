@@ -44,6 +44,11 @@ public protocol StaticMappable: Mappable {
 
 public extension Mappable {
 	
+	init(with attributes: [String: Any]) {
+        self.init()
+        self.mapping(map: Map(mappingType: .fromJSON, JSONDictionary: attributes))
+    }
+
     init(attributes: [String: Any]) {
         self.init()
         self.update(attributes: attributes)
