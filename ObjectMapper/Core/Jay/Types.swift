@@ -11,7 +11,7 @@ typealias JChar = UTF8.CodeUnit
 public enum JSON {
     public enum Number {
         case integer(Int)
-//        case unsignedInteger(UInt)
+        case unsignedInteger(UInt)
         case double(Double)
     }
     case object([String: JSON])
