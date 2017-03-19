@@ -44,7 +44,7 @@ extension JSON {
             switch num {
             case .double(let dbl): return dbl
             case .integer(let int): return int
-            case .unsignedInteger(let uint): return uint
+//            case .unsignedInteger(let uint): return uint
             }
             
         case .string(let str):

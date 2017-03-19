@@ -24,8 +24,8 @@ extension JSON: JsonFormattable {
             switch num {
             case .integer(let i):
                 stream <<< String(i).chars()
-            case .unsignedInteger(let ui):
-                stream <<< String(ui).chars()
+//            case .unsignedInteger(let ui):
+//                stream <<< String(ui).chars()
             case .double(let d):
                 stream <<< String(d).chars()
             }

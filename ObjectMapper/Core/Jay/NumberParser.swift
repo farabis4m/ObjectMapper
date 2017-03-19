@@ -45,7 +45,8 @@ struct NumberParser: JsonParser {
             
             //now if any number terminator is here, finish up with 0
             if Const.NumberTerminators.contains(reader.curr()) {
-                return .number(.unsignedInteger(0))
+//                return .number(.unsignedInteger(0))
+                return .number(.integer(0))
             }
             
             //else there MUST be a frac part
@@ -79,13 +80,13 @@ struct NumberParser: JsonParser {
         
         //if that's it, let's call it an integer
         if frac.isEmpty && exp == nil {
-            if negative {
+//            if negative {
                 //if it's negative, make it a signed integer
                 return .integer(int)
-            } else {
+//            } else {
                 //if it's positive, make it a uint
-                return .unsignedInteger(UInt(int))
-            }
+//                return .unsignedInteger(UInt(int))
+//            }
         }
         
         //now we're using double
