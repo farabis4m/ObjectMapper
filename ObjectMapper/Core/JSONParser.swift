@@ -15,14 +15,14 @@ open class JSONParser {
 	/**
 	NOTE: UnicodeScalars increase the performance compared to Characters
 	*/
-	var next: (Void) -> UnicodeScalar?
+	var next: (()) -> UnicodeScalar?
 	
 	public init(_ string: String) {
 		self.view = string.unicodeScalars
 		self.index = self.view.startIndex
         let view = self.view
         var index = self.index
-		next = {
+		next = {_ in
 			if index == view.endIndex { return nil }
 			let scalar = view[index]
             index = view.index(after: index)
@@ -66,7 +66,7 @@ open class JSONParser {
 		var key = String.UnicodeScalarView()
 		var inString = false
 		
-		while let scalar = next(){
+		while let scalar = next(()){
 			
 			
 			if scalar == "\""{
@@ -151,7 +151,7 @@ open class JSONParser {
         let space = " ".unicodeScalars[" ".unicodeScalars.startIndex]
         let newLine = "\n".unicodeScalars["\n".unicodeScalars.startIndex]
         let tab = "\t".unicodeScalars["\t".unicodeScalars.startIndex]
-		while let scalar = next() {
+		while let scalar = next(()) {
             if scalar == comma { continue }
 			if scalar == "{" {
 				output.append(parseObject())

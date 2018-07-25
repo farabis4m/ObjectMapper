@@ -170,7 +170,7 @@ public final class Mapper<N: Mappable> {
 	/// Maps an array of JSON dictionary to an array of Mappable objects
 	public func mapArray(_ JSONArray: [[String : Any]]) -> [N]? {
 		// map every element in JSON array to type N
-		let result = JSONArray.flatMap(map)
+		let result = JSONArray.compactMap(map)
 		return result
 	}
 	
@@ -388,7 +388,7 @@ extension Mapper where N: Hashable {
 	/// Maps an Set of JSON dictionary to an array of Mappable objects
 	public func mapSet(_ JSONArray: [[String : Any]]) -> Set<N> {
 		// map every element in JSON array to type N
-		return Set(JSONArray.flatMap(map))
+		return Set(JSONArray.compactMap(map))
 	}
 
 	///Maps a Set of Objects to a Set of JSON dictionaries [[String : AnyObject]]

@@ -286,7 +286,7 @@ public func <- <Transform: TransformType>(left: inout [String: Transform.Object]
 
 private func fromJSONArrayWithTransform<Transform: TransformType>(_ input: Any?, transform: Transform) -> [Transform.Object]? {
 	if let values = input as? [Any] {
-		return values.flatMap { value in
+		return values.compactMap { value in
 			return transform.transformFromJSON(value)
 		}
 	} else {
@@ -305,7 +305,7 @@ private func fromJSONDictionaryWithTransform<Transform: TransformType>(_ input: 
 }
 
 private func toJSONArrayWithTransform<Transform: TransformType>(_ input: [Transform.Object]?, transform: Transform) -> [Transform.JSON]? {
-	return input?.flatMap { value in
+	return input?.compactMap { value in
 		return transform.transformToJSON(value)
 	}
 }
@@ -713,12 +713,12 @@ public func <- <T: Mappable>(left: inout Array<Array<T>>!, right: Map) {
 public func <- <Transform: TransformType>(left: inout Array<Array<Transform.Object>>, right: (Map, Transform)) where Transform.Object: Mappable {
 	let (map, transform) = right
 	if let original2DArray = map.currentValue as? [[Any]] , map.mappingType == .fromJSON && map.isKeyPresent {
-		let transformed2DArray = original2DArray.flatMap { values in
+		let transformed2DArray = original2DArray.compactMap { values in
 			fromJSONArrayWithTransform(values, transform: transform)
 		}
 		FromJSON.basicType(&left, object: transformed2DArray)
 	} else if map.mappingType == .toJSON {
-		let transformed2DArray = left.flatMap { values in
+		let transformed2DArray = left.compactMap { values in
 			toJSONArrayWithTransform(values, transform: transform)
 		}
 		ToJSON.basicType(transformed2DArray, map: map)
@@ -729,12 +729,12 @@ public func <- <Transform: TransformType>(left: inout Array<Array<Transform.Obje
 public func <- <Transform: TransformType>(left:inout Array<Array<Transform.Object>>?, right: (Map, Transform)) where Transform.Object: Mappable {
 	let (map, transform) = right
 	if let original2DArray = map.currentValue as? [[Any]] , map.mappingType == .fromJSON && map.isKeyPresent {
-		let transformed2DArray = original2DArray.flatMap { values in
+		let transformed2DArray = original2DArray.compactMap { values in
 			fromJSONArrayWithTransform(values, transform: transform)
 		}
 		FromJSON.optionalBasicType(&left, object: transformed2DArray)
 	} else if map.mappingType == .toJSON {
-		let transformed2DArray = left?.flatMap { values in
+		let transformed2DArray = left?.compactMap { values in
 			toJSONArrayWithTransform(values, transform: transform)
 		}
 		ToJSON.optionalBasicType(transformed2DArray, map: map)
@@ -745,12 +745,12 @@ public func <- <Transform: TransformType>(left:inout Array<Array<Transform.Objec
 public func <- <Transform: TransformType>(left: inout Array<Array<Transform.Object>>!, right: (Map, Transform)) where Transform.Object: Mappable {
 	let (map, transform) = right
 	if let original2DArray = map.currentValue as? [[Any]] , map.mappingType == .fromJSON && map.isKeyPresent {
-		let transformed2DArray = original2DArray.flatMap { values in
+		let transformed2DArray = original2DArray.compactMap { values in
 			fromJSONArrayWithTransform(values, transform: transform)
 		}
 		FromJSON.optionalBasicType(&left, object: transformed2DArray)
 	} else if map.mappingType == .toJSON {
-		let transformed2DArray = left?.flatMap { values in
+		let transformed2DArray = left?.compactMap { values in
 			toJSONArrayWithTransform(values, transform: transform)
 		}
 		ToJSON.optionalBasicType(transformed2DArray, map: map)
