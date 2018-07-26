@@ -9,7 +9,7 @@ import Foundation
 
 import ObjectMapper
 
-infix operator <-- {}
+infix operator <--
 
 ///// Object conforming to Mappable
 //public func <-- <T>(inout left: T, right: Map) {
