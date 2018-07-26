@@ -69,7 +69,7 @@ public final class Mapper<N: Mappable> {
 	/// Maps a JSON dictionary to an existing object that conforms to Mappable.
 	/// Usefull for those pesky objects that have crappy designated initializers like NSManagedObject
 	public func map(_ JSONDictionary: [String : Any], toObject object: N) -> N {
-		let map = Map(mappingType: .fromJSON, JSONDictionary: JSONDictionary, toObject: true, context: context)
+		let map = Map(mappingType: .fromJSON, JSON: JSONDictionary, toObject: true, context: context)
 		self.transform?.transformFrom(map, object: object)
 		return object
 	}
@@ -112,7 +112,7 @@ public final class Mapper<N: Mappable> {
 
 	/// Maps a JSON dictionary to an object that conforms to Mappable
 	public func map(_ JSONDictionary: [String : Any]) -> N? {
-		let map = Map(mappingType: .fromJSON, JSONDictionary: JSONDictionary, context: context)
+		let map = Map(mappingType: .fromJSON, JSON: JSONDictionary, context: context)
 		
 		if let klass = N.self as? StaticMappable.Type {
 			if let object = klass.objectForMapping(map) as? N, self.transform?.validation?(JSONDictionary) == true {
@@ -290,9 +290,9 @@ extension Mapper {
 	// MARK: Functions that create JSON from objects	
 	
 	public func toJSON(_ object: N) -> [String : Any] {
-		let map = Map(mappingType: .toJSON, JSONDictionary: [:], context: context)
+		let map = Map(mappingType: .toJSON, JSON: [:], context: context)
 		self.transform?.transformTo(map, object: object)
-		return map.JSONDictionary
+		return map.JSON
 	}
     
 	public func toJSONArray(_ array: [N]) -> [[String : Any]] {

@@ -30,11 +30,11 @@ import class Foundation.NSNumber
 
 private func setValue(_ value: Any, map: Map) {
     if let key = map.currentKey {
-        setValue(value, key: key, checkForNestedKeys: map.keyIsNested, dictionary: &map.JSONDictionary)
+        setValue(value, key: key, checkForNestedKeys: map.keyIsNested, dictionary: &map.JSON)
     } else {
         if let dic = value as? [String: Any] {
             for (k,v) in dic {
-                map.JSONDictionary[k] = v
+                map.JSON[k] = v
             }
         }
     }

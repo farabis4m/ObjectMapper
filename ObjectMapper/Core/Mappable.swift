@@ -26,11 +26,11 @@ public extension Mappable {
 
 public extension Mappable {
     func toJSON(transform: ObjectTransform<Self>? = nil) -> [String: Any] {
-        let map = Map(mappingType: .toJSON, JSONDictionary: [:])
+		let map = Map(mappingType: .toJSON, JSON: [:])
         return (transform ?? type(of: self).mapping)?.transformTo(map, object: self) ?? [:]
 	}
 	func fromJSON(transform: ObjectTransform<Self>) -> Self? {
-        let map = Map(mappingType: .fromJSON, JSONDictionary: [:])
+		let map = Map(mappingType: .fromJSON, JSON: [:])
         return (transform ?? type(of: self).mapping)?.transformFrom(map, object: self)
 	}
 }
@@ -46,7 +46,7 @@ public extension Mappable {
 	
 	init(with attributes: [String: Any]) {
         self.init()
-        self.mapping(map: Map(mappingType: .fromJSON, JSONDictionary: attributes))
+		self.mapping(map: Map(mappingType: .fromJSON, JSON: attributes))
     }
 
     init(attributes: [String: Any]) {
@@ -55,7 +55,7 @@ public extension Mappable {
     }
     
     func update(attributes: [String: Any], transform: ObjectTransform<Self>? = nil) {
-        let map = Map(mappingType: .fromJSON, JSONDictionary: attributes)
+		let map = Map(mappingType: .fromJSON, JSON: attributes)
         (transform ?? type(of: self).mapping)?.transformFrom(map, object: self)
     }
     

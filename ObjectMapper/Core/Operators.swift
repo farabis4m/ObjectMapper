@@ -38,9 +38,9 @@ public func <- <T>(map: Map, value: T) {
     if map.mappingType == .toJSON {
         if let key = map.currentKey {
             let components = key.components(separatedBy: ".")
-            if components.count == 1 { map.JSONDictionary[key] = value }
+            if components.count == 1 { map.JSON[key] = value }
             else {
-                var destination = (map.JSONDictionary[components.first!] as? [String: Any]) ?? [:]
+                var destination = (map.JSON[components.first!] as? [String: Any]) ?? [:]
                 destination[components.last!] = value
             }
         }
@@ -51,9 +51,9 @@ public func <- <T>(map: Map, value: T?) {
     if map.mappingType == .toJSON {
         if let key = map.currentKey, let v = value {
             let components = key.components(separatedBy: ".")
-            if components.count == 1 { map.JSONDictionary[key] = v }
+            if components.count == 1 { map.JSON[key] = v }
             else {
-                var destination = (map.JSONDictionary[components.first!] as? [String: Any]) ?? [:]
+                var destination = (map.JSON[components.first!] as? [String: Any]) ?? [:]
                 destination[components.last!] = v
             }
         }
