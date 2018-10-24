@@ -40,11 +40,6 @@ internal final class FromJSON {
 		field = object
 	}
 	
-	/// Implicitly unwrapped optional basic type
-	class func optionalBasicType<FieldType>(_ field: inout FieldType!, object: FieldType?) {
-		field = object
-	}
-	
 	/// Mappable object
 	class func object<N: Mappable>(_ field: inout N, map: Map) {
 		if map.toObject {
@@ -56,15 +51,6 @@ internal final class FromJSON {
 	
 	/// Optional Mappable Object
 	class func optionalObject<N: Mappable>(_ field: inout N?, map: Map) {
-		if let field = field , map.toObject && map.currentValue != nil {
-			Mapper(context: map.context).map(map.currentValue, toObject: field)
-		} else {
-			field = Mapper(context: map.context).map(map.currentValue)
-		}
-	}
-	
-	/// Implicitly unwrapped Optional Mappable Object
-	class func optionalObject<N: Mappable>(_ field: inout N!, map: Map) {
 		if let field = field , map.toObject && map.currentValue != nil {
 			Mapper(context: map.context).map(map.currentValue, toObject: field)
 		} else {
@@ -88,15 +74,6 @@ internal final class FromJSON {
 		}
 	}
 	
-	/// Implicitly unwrapped optional mappable object array
-	class func optionalObjectArray<N: Mappable>(_ field: inout Array<N>!, map: Map) {
-		if let objects: Array<N> = Mapper(context: map.context).mapArray(map.currentValue) {
-			field = objects
-		} else {
-			field = nil
-		}
-	}
-	
 	/// mappable object array
 	class func twoDimensionalObjectArray<N: Mappable>(_ field: inout Array<Array<N>>, map: Map) {
 		if let objects = Mapper<N>(context: map.context).mapArrayOfArrays(map.currentValue) {
@@ -106,11 +83,6 @@ internal final class FromJSON {
 	
 	/// optional mappable 2 dimentional object array
 	class func optionalTwoDimensionalObjectArray<N: Mappable>(_ field: inout Array<Array<N>>?, map: Map) {
-		field = Mapper(context: map.context).mapArrayOfArrays(map.currentValue)
-	}
-	
-	/// Implicitly unwrapped optional 2 dimentional mappable object array
-	class func optionalTwoDimensionalObjectArray<N: Mappable>(_ field: inout Array<Array<N>>!, map: Map) {
 		field = Mapper(context: map.context).mapArrayOfArrays(map.currentValue)
 	}
 	
@@ -134,15 +106,6 @@ internal final class FromJSON {
 		}
 	}
 	
-	/// Implicitly unwrapped Dictionary containing Mappable objects
-	class func optionalObjectDictionary<N: Mappable>(_ field: inout Dictionary<String, N>!, map: Map) {
-		if let field = field , map.toObject && map.currentValue != nil {
-			Mapper(context: map.context).mapDictionary(map.currentValue, toDictionary: field)
-		} else {
-			field = Mapper(context: map.context).mapDictionary(map.currentValue)
-		}
-	}
-	
 	/// Dictionary containing Array of Mappable objects
 	class func objectDictionaryOfArrays<N: Mappable>(_ field: inout Dictionary<String, [N]>, map: Map) {
 		if let objects = Mapper<N>(context: map.context).mapDictionaryOfArrays(map.currentValue) {
@@ -152,11 +115,6 @@ internal final class FromJSON {
 	
 	/// Optional Dictionary containing Array of Mappable objects
 	class func optionalObjectDictionaryOfArrays<N: Mappable>(_ field: inout Dictionary<String, [N]>?, map: Map) {
-		field = Mapper<N>(context: map.context).mapDictionaryOfArrays(map.currentValue)
-	}
-	
-	/// Implicitly unwrapped Dictionary containing Array of Mappable objects
-	class func optionalObjectDictionaryOfArrays<N: Mappable>(_ field: inout Dictionary<String, [N]>!, map: Map) {
 		field = Mapper<N>(context: map.context).mapDictionaryOfArrays(map.currentValue)
 	}
 	
@@ -171,10 +129,4 @@ internal final class FromJSON {
 	class func optionalObjectSet<N: Mappable>(_ field: inout Set<N>?, map: Map) {
 		field = Mapper(context: map.context).mapSet(map.currentValue)
 	}
-	
-	/// Implicitly unwrapped optional mappable object array
-	class func optionalObjectSet<N: Mappable>(_ field: inout Set<N>!, map: Map) {
-		field = Mapper(context: map.context).mapSet(map.currentValue)
-	}
-	
 }
